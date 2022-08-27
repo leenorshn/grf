@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grf/apis/budget_api.dart';
 import 'package:grf/models/revenu.dart';
+import 'package:grf/new_budget_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -31,80 +33,15 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Mes sources de revenus"),
+                const Text("Budgets"),
                 ElevatedButton.icon(
                   onPressed: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: MediaQuery.of(context).size.height / 2,
-                          color: Colors.white,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                color: Colors.red,
-                                height: 56,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Nouvelle source',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextButton.icon(
-                                      label: const Text('Enregister'),
-                                      icon: const Icon(
-                                          CupertinoIcons.checkmark_alt),
-                                      onPressed: () => Navigator.pop(context),
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 40, vertical: 10),
-                                child: TextField(
-                                  onChanged: (v) {
-                                    setState(() {
-                                      revenu = double.parse(v);
-                                    });
-                                  },
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                      labelText: "Revenu"),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 40, vertical: 10),
-                                child: TextField(
-                                  onChanged: (v) {
-                                    setState(() {
-                                      source = v;
-                                    });
-                                  },
-                                  keyboardType: TextInputType.text,
-                                  decoration: const InputDecoration(
-                                      labelText: "Source"),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const NewBudgetScreen(),
+                        fullscreenDialog: true,
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -122,7 +59,7 @@ class _SettingScreenState extends State<SettingScreen> {
           const SizedBox(
             height: 16,
           ),
-          for (var t in revenuData)
+          for (var t in BudgetApi().budgetData)
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               padding: const EdgeInsets.symmetric(
@@ -134,18 +71,27 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: ListTile(
-                leading: Text("${t.montant} \$/${t.frequence}"),
+              child: ExpansionTile(
+                subtitle: Text("${t.totalBudget} \$"),
                 title: Text(
-                  t.source,
+                  t.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                trailing: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit),
-                ),
+                backgroundColor: Colors.red[50],
+                children: t.items
+                    .map(
+                      (e) => ListTile(
+                        title: Text(e.label),
+                        leading: Text("${e.value} \$"),
+                        trailing: IconButton(
+                          icon: const Icon(CupertinoIcons.checkmark_alt_circle),
+                          onPressed: () {},
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           const SizedBox(

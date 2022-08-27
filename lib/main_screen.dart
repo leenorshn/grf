@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grf/add_depasse_screen.dart';
+import 'package:grf/add_revenu_screen.dart';
 import 'package:grf/models/charge.dart';
 import 'package:grf/rapport_screen.dart';
 import 'package:grf/setting_screen.dart';
@@ -162,33 +163,78 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
+      floatingActionButton: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddDepasseScreen(),
-                fullscreenDialog: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(CupertinoIcons.arrow_down),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddRevenuScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                label: const Text(
+                  "Ajouter Revenu",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 88),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
             ),
-          ),
-          child: const Text(
-            "Ajouter depasse",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(CupertinoIcons.arrow_up),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddDepasseScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  primary: Colors.black,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                  ),
+                ),
+                label: const Text(
+                  "Ajouter depense",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
