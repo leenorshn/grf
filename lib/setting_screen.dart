@@ -59,41 +59,40 @@ class _SettingScreenState extends State<SettingScreen> {
           const SizedBox(
             height: 16,
           ),
-          for (var t in BudgetApi().budgetData)
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              padding: const EdgeInsets.symmetric(
-                vertical: 6,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: ExpansionTile(
-                subtitle: Text("${t.totalBudget} \$"),
-                title: Text(
-                  t.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                backgroundColor: Colors.red[50],
-                children: t.items
-                    .map(
-                      (e) => ListTile(
-                        title: Text(e.label),
-                        leading: Text("${e.value} \$"),
-                        trailing: IconButton(
-                          icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-                          onPressed: () {},
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const EdgeInsets.symmetric(
+              vertical: 6,
             ),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: ExpansionTile(
+              subtitle: Text("${t.totalBudget} \$"),
+              title: Text(
+                t.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              backgroundColor: Colors.red[50],
+              children: t.items
+                  .map(
+                    (e) => ListTile(
+                      title: Text(e.label),
+                      leading: Text("${e.value} \$"),
+                      trailing: IconButton(
+                        icon: const Icon(CupertinoIcons.checkmark_alt_circle),
+                        onPressed: () {},
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           const SizedBox(
             height: 10,
           )

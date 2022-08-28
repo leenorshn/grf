@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grf/add_depasse_screen.dart';
 import 'package:grf/add_revenu_screen.dart';
-import 'package:grf/models/charge.dart';
+import 'package:grf/models/operation.dart';
 import 'package:grf/rapport_screen.dart';
 import 'package:grf/setting_screen.dart';
 
@@ -122,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
         itemExtent: 88,
         padding: const EdgeInsets.only(bottom: 130),
         itemBuilder: (context, index) {
-          Charge charge = chargesData[index];
+          //  Operation charge = chargesData[index];
           return Card(
             color: Colors.white,
             margin: const EdgeInsets.only(top: 1),

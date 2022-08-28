@@ -1,8 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Budget {
   String title;
   List<BItem> items;
+  Timestamp date;
 
-  Budget({required this.title, required this.items});
+  Budget({
+    required this.title,
+    required this.items,
+    required this.date,
+  });
+
+  factory Budget.fromJson(var json) {
+    return Budget(
+        title: json['title'], items: json['value'], date: json['date']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "title": title,
+      "items": items.map((e) => e.toJson()),
+      "date": date,
+    };
+  }
 
   double getTotal() {
     double t = 0;
@@ -20,4 +40,15 @@ class BItem {
   double value;
 
   BItem({this.value = 0, required this.label});
+
+  factory BItem.fromJson(var json) {
+    return BItem(label: json['label'], value: json['value']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "label": label,
+      "value": value,
+    };
+  }
 }
