@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/add_depasse_screen.dart';
 import 'package:grf/add_revenu_screen.dart';
+import 'package:grf/blocs/operation/operation_bloc.dart';
 import 'package:grf/models/operation.dart';
 import 'package:grf/rapport_screen.dart';
 import 'package:grf/setting_screen.dart';
@@ -117,48 +119,60 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: chargesData.length,
-        itemExtent: 88,
-        padding: const EdgeInsets.only(bottom: 130),
-        itemBuilder: (context, index) {
-          //  Operation charge = chargesData[index];
-          return Card(
-            color: Colors.white,
-            margin: const EdgeInsets.only(top: 1),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Center(
-              child: ListTile(
-                trailing: CircleAvatar(
-                  backgroundColor: Colors.red[50],
-                  child: const Icon(
-                    CupertinoIcons.arrow_up,
-                    color: Colors.black,
+      body: BlocBuilder<OperationBloc, OperationState>(
+        builder: (context, state) {
+          if (state is OperationLoadedFailure) {}
+
+          if (state is OperationLoadedSuccess) {
+            return ListView.builder(
+              itemCount: state.data.length,
+              itemExtent: 88,
+              padding: const EdgeInsets.only(bottom: 130),
+              itemBuilder: (context, index) {
+                Operation operation = state.data[index];
+                return Card(
+                  color: Colors.white,
+                  margin: const EdgeInsets.only(top: 1),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
                   ),
-                ),
-                leading: Text.rich(
-                  TextSpan(
-                    text: "${charge.montant} ",
-                    children: const [
-                      TextSpan(
-                        text: "\$",
-                        style: TextStyle(
-                          fontSize: 18,
+                  child: Center(
+                    child: ListTile(
+                      trailing: CircleAvatar(
+                        backgroundColor: Colors.red[50],
+                        child: const Icon(
+                          CupertinoIcons.arrow_up,
+                          color: Colors.black,
                         ),
                       ),
-                    ],
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
+                      leading: Text.rich(
+                        TextSpan(
+                          text: "${operation.montant} ",
+                          children: const [
+                            TextSpan(
+                              text: "\$",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      title: Text("${operation.libel} "),
+                      onTap: () {},
                     ),
                   ),
-                ),
-                title: Text("${charge.libele} "),
-                onTap: () {},
-              ),
-            ),
+                );
+              },
+            );
+          }
+
+          return Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
