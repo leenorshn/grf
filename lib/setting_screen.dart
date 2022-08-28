@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/apis/budget_api.dart';
+import 'package:grf/blocs/budget/budget_bloc.dart';
+import 'package:grf/models/budget.dart';
 import 'package:grf/models/revenu.dart';
 import 'package:grf/new_budget_screen.dart';
 
@@ -59,39 +62,59 @@ class _SettingScreenState extends State<SettingScreen> {
           const SizedBox(
             height: 16,
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-              ),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: ExpansionTile(
-              subtitle: Text("${t.totalBudget} \$"),
-              title: Text(
-                t.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              backgroundColor: Colors.red[50],
-              children: t.items
-                  .map(
-                    (e) => ListTile(
-                      title: Text(e.label),
-                      leading: Text("${e.value} \$"),
-                      trailing: IconButton(
-                        icon: const Icon(CupertinoIcons.checkmark_alt_circle),
-                        onPressed: () {},
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+          BlocBuilder<BudgetBloc, BudgetState>(
+            builder: (context, state) {
+              if (state is BudgetLoadedFailure) {}
+              if (state is BudgetLoadedSuccess) {
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: state.data.length,
+                      itemBuilder: (context, index) {
+                        Budget b = state.data[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ExpansionTile(
+                            subtitle: Text("${b.totalBudget} \$"),
+                            title: Text(
+                              b.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            backgroundColor: Colors.red[50],
+                            children: b.items
+                                .map(
+                                  (e) => ListTile(
+                                    title: Text(e.label),
+                                    leading: Text("${e.value} \$"),
+                                    trailing: IconButton(
+                                      icon: const Icon(
+                                          CupertinoIcons.checkmark_alt_circle),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      }),
+                );
+              }
+
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
           const SizedBox(
             height: 10,

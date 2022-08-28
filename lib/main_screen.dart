@@ -121,7 +121,11 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: BlocBuilder<OperationBloc, OperationState>(
         builder: (context, state) {
-          if (state is OperationLoadedFailure) {}
+          if (state is OperationLoadedFailure) {
+            return Center(
+              child: Text("Erreur de chargement"),
+            );
+          }
 
           if (state is OperationLoadedSuccess) {
             return ListView.builder(
