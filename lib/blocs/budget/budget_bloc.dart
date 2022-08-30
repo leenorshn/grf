@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -30,6 +29,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       }
       if (event is AddBudgetEvent) {
         await budgetApi.addBudget(event.budget);
+        add(LoadBudgetEvent());
+      }
+      if (event is RemoveBudgetEvent) {
+        await budgetApi.removeBudget(event.id);
+        add(LoadBudgetEvent());
       }
     });
   }

@@ -25,7 +25,40 @@ class OperationApi {
     await db
         .collection("users")
         .doc(uid)
-        .collection("budgets")
+        .collection("operations")
         .add(operation.toJson());
+  }
+
+  static double getSolde(List<Operation> data) {
+    double s = 0;
+
+    for (var op in data) {
+      if (op.type == "depense") {
+        s = s - op.montant;
+      } else {
+        s = s + op.montant;
+      }
+    }
+    return s;
+  }
+
+  static double getDepense(List<Operation> data) {
+    double s = 0;
+    for (var op in data) {
+      if (op.type == "depense") {
+        s = s + op.montant;
+      }
+    }
+    return s;
+  }
+
+  static double getRevenu(List<Operation> data) {
+    double s = 0;
+    for (var op in data) {
+      if (op.type != "depense") {
+        s = s + op.montant;
+      }
+    }
+    return s;
   }
 }

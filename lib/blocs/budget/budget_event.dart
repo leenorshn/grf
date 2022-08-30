@@ -20,3 +20,9 @@ class AddBudgetEvent extends BudgetEvent {
 
   const AddBudgetEvent(this.budget);
 }
+
+class RemoveBudgetEvent extends BudgetEvent {
+  final String id;
+
+  const RemoveBudgetEvent(this.id);
+}

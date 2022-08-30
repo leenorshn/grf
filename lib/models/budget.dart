@@ -1,32 +1,52 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Budget {
-  String title;
-  List<BItem> items;
-  Timestamp date;
+  String? title;
+  List<BItem>? items;
+  Timestamp? date;
+  DocumentSnapshot? reference;
 
   Budget({
-    required this.title,
-    required this.items,
-    required this.date,
+    this.title,
+    this.items,
+    this.date,
+    this.reference,
   });
 
-  factory Budget.fromJson(var json) {
-    return Budget(
-        title: json['title'], items: json['value'], date: json['date']);
+  Budget.fromJson(DocumentSnapshot snapshot, {this.reference}) {
+    Map<String, dynamic> json = snapshot.data() as Map<String, dynamic>;
+    title = json['title'];
+    items = [];
+    json['items'].forEach((v) {
+      items!.add(BItem.fromJson(jsonDecode(v)));
+    });
+    date = json['date'];
   }
+
+  Budget.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromJson(snapshot, reference: snapshot);
 
   Map<String, dynamic> toJson() {
     return {
       "title": title,
-      "items": items.map((e) => e.toJson()),
+      "items": _toList(items!),
       "date": date,
     };
   }
 
+  _toList(List<BItem> foods) {
+    var json = [];
+    foods.forEach((data) {
+      json.add(jsonEncode(data.toJson()));
+    });
+    return json;
+  }
+
   double getTotal() {
     double t = 0;
-    for (var b in items) {
+    for (var b in items!) {
       t = t + b.value;
     }
     return t;

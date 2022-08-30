@@ -12,7 +12,11 @@ class AuthInitial extends AuthState {
   List<Object> get props => [];
 }
 
-class Authenticated extends AuthState {}
+class Authenticated extends AuthState {
+  final User user;
+
+  const Authenticated(this.user);
+}
 
 class UnAuthenticated extends AuthState {}
 

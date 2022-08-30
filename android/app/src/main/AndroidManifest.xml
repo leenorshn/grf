@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.grf">
+    package="com.inv.grf">
    <application
         android:label="grf"
         android:name="${applicationName}"

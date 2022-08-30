@@ -15,7 +15,7 @@ class BudgetApi {
         .orderBy("date", descending: true)
         .snapshots()
         .map(
-          (event) => event.docs.map((e) => Budget.fromJson(e.data())).toList(),
+          (event) => event.docs.map((e) => Budget.fromSnapshot(e)).toList(),
         );
   }
 
@@ -26,5 +26,15 @@ class BudgetApi {
         .doc(uid)
         .collection("budgets")
         .add(budget.toJson());
+  }
+
+  Future<void> removeBudget(String id) async {
+    var uid = auth.currentUser!.uid;
+    await db
+        .collection("users")
+        .doc(uid)
+        .collection("budgets")
+        .doc(id)
+        .delete();
   }
 }

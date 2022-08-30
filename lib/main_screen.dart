@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/add_depasse_screen.dart';
 import 'package:grf/add_revenu_screen.dart';
+import 'package:grf/apis/operation_api.dart';
 import 'package:grf/blocs/operation/operation_bloc.dart';
 import 'package:grf/models/operation.dart';
 import 'package:grf/rapport_screen.dart';
@@ -67,23 +68,33 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "Solde actuel",
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          "400 \$",
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        BlocBuilder<OperationBloc, OperationState>(
+                          builder: (context, state) {
+                            if (state is OperationLoadedSuccess) {
+                              var solde = OperationApi.getSolde(state.data);
+                              return Text(
+                                "$solde \$",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
                         ),
-                        Text(
-                          "(Salaire/mois)",
+                        const Text(
+                          "(actifs/mois)",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -96,19 +107,29 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "Dépasse",
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          "47.5 \$",
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.white,
-                          ),
+                        BlocBuilder<OperationBloc, OperationState>(
+                          builder: (context, state) {
+                            if (state is OperationLoadedSuccess) {
+                              var depense = OperationApi.getDepense(state.data);
+                              return Text(
+                                "$depense \$",
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.white,
+                                ),
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -143,11 +164,18 @@ class _MainScreenState extends State<MainScreen> {
                   child: Center(
                     child: ListTile(
                       trailing: CircleAvatar(
-                        backgroundColor: Colors.red[50],
-                        child: const Icon(
-                          CupertinoIcons.arrow_up,
-                          color: Colors.black,
-                        ),
+                        backgroundColor: operation.type == "depense"
+                            ? Colors.red[50]
+                            : Colors.green[50],
+                        child: operation.type == "depense"
+                            ? const Icon(
+                                CupertinoIcons.arrow_up,
+                                color: Colors.red,
+                              )
+                            : const Icon(
+                                CupertinoIcons.arrow_down,
+                                color: Colors.green,
+                              ),
                       ),
                       leading: Text.rich(
                         TextSpan(

@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grf/blocs/operation/operation_bloc.dart';
+import 'package:grf/models/operation.dart';
 
 class AddRevenuScreen extends StatefulWidget {
   const AddRevenuScreen({Key? key}) : super(key: key);
@@ -64,7 +68,19 @@ class _AddRevenuScreenState extends State<AddRevenuScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                var operation = Operation.fromJson(
+                  {
+                    "montant": montant,
+                    "libel": libel,
+                    "date": Timestamp.now(),
+                    "type": "revenu",
+                  },
+                );
+                BlocProvider.of<OperationBloc>(context)
+                    .add(AddOpsEvent(operation));
+                Navigator.pop(context);
+              },
               child: const Text("Enregister"),
             ),
           )
