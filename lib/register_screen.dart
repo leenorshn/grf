@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/blocs/auth/auth_bloc.dart';
 import 'package:grf/login_screen.dart';
+import 'package:grf/main.dart';
+import 'package:grf/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -62,13 +64,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     email = v;
                   });
                 },
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(
                   fillColor: Colors.white,
                   filled: true,
-                  prefixIcon: Icon(CupertinoIcons.mail),
-                  labelText: "Email",
-                  hintText: "nath@grf.cd",
+                  prefixIcon: Icon(CupertinoIcons.phone),
+                  labelText: "Phone",
+                  hintText: "Ex: 98857774",
                 ),
               ),
               const SizedBox(
@@ -105,8 +107,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (email == "" && password.length < 8 && name.length < 3) {
                     print("Erreur champ vide");
                   } else {
-                    BlocProvider.of<AuthBloc>(context).add(RegisterEvent(
-                        email: email, password: password, name: name));
+                    BlocProvider.of<AuthBloc>(context).add(
+                        Register(phone: email, password: password, name: name));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const RootScreen()));
                   }
                 },
                 child: const Text("creer compte"),

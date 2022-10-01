@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:grf/blocs/auth/auth_bloc.dart';
 import 'package:grf/blocs/budget/budget_bloc.dart';
 import 'package:grf/models/budget.dart';
 import 'package:grf/new_budget_screen.dart';
@@ -22,6 +23,19 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Parametre"),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(Logout());
+              Navigator.pop(context);
+            },
+            icon: const Icon(CupertinoIcons.location, color: Colors.white),
+            label: const Text(
+              "Deconnexion",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

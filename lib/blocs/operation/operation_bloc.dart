@@ -25,7 +25,7 @@ class OperationBloc extends Bloc<OperationEvent, OperationState> {
       }
 
       if (event is UpdateOpsEvent) {
-        print(event.data[1].type);
+        //print(event.data[1].type);
         emit(OperationLoadedSuccess(event.data));
       }
       if (event is AddOpsEvent) {

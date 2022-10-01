@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthBloc(AuthApi())..add(AppStartedEvent()),
+      create: (context) =>
+          AuthBloc(authService: AuthApi())..add(StartAppEvent()),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
                 return const Scaffold(
                     body: Center(child: CircularProgressIndicator()));
               }
-              if (state is Authenticated) {
+              if (state is AuthSuccess) {
                 return const MainScreen();
               }
               return const LoginScreen();
@@ -64,6 +65,35 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class RootScreen extends StatelessWidget {
+  const RootScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      //bloc: AuthBloc(authService: AuthService())..add(StartAppEvent()),
+      builder: (context, state) {
+        if (state is UnAuthenticated) {
+          return const LoginScreen();
+        }
+        if (state is AuthSuccess) {
+          //print(state.user);
+          return const MainScreen();
+        }
+        if (state is AuthFailure) {
+          return const LoginScreen();
+        }
+
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthApi {
   FirebaseAuth auth = FirebaseAuth.instance;
-  Future<UserCredential> login(String email, String password) async {
+  Future<UserCredential> login({required String email,required String password}) async {
     return auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
@@ -12,7 +12,7 @@ class AuthApi {
       required String password,
       required String name}) async {
     var userCred = await auth.createUserWithEmailAndPassword(
-      email: email,
+      email: email+"@mela.com",
       password: password,
     );
     if (userCred.user != null) {
@@ -29,7 +29,7 @@ class AuthApi {
   }
 
   Stream<User?> isLogin() {
-    return auth.authStateChanges();
+    return auth.idTokenChanges();
   }
 
   Future<void> logout() async {

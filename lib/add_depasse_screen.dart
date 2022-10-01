@@ -5,6 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/blocs/operation/operation_bloc.dart';
 import 'package:grf/models/operation.dart';
 
+const List<String> list = <String>[
+  'Physiologique',
+  'Securitaire',
+  'Appartenance',
+  'Estime',
+  "Accompagnement",
+  "Autre"
+];
+
 class AddDepasseScreen extends StatefulWidget {
   const AddDepasseScreen({Key? key}) : super(key: key);
 
@@ -15,6 +24,7 @@ class AddDepasseScreen extends StatefulWidget {
 class _AddDepasseScreenState extends State<AddDepasseScreen> {
   String libel = "";
   double montant = 0;
+  String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +49,30 @@ class _AddDepasseScreenState extends State<AddDepasseScreen> {
                 labelText: "Montent",
                 prefixIcon: Icon(CupertinoIcons.money_dollar),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 38.0,
+              vertical: 10,
+            ),
+            child: DropdownButtonFormField(
+              value: dropdownValue,
+              icon: const Icon(CupertinoIcons.arrowtriangle_down),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue = value!;
+                });
+              },
+              items: list.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
           Padding(
@@ -73,6 +107,7 @@ class _AddDepasseScreenState extends State<AddDepasseScreen> {
                   {
                     "montant": montant,
                     "libel": libel,
+                    "besoin": dropdownValue,
                     "date": Timestamp.now(),
                     "type": "depense",
                   },

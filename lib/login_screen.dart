@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grf/blocs/auth/auth_bloc.dart';
+import 'package:grf/main.dart';
 import 'package:grf/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -42,13 +43,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   email = v;
                 });
               },
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
               decoration: const InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  prefixIcon: Icon(CupertinoIcons.mail),
-                  labelText: "Email",
-                  hintText: "nath@grf.cd"),
+                fillColor: Colors.white,
+                filled: true,
+                prefixIcon: Icon(CupertinoIcons.phone),
+                labelText: "Phone",
+                hintText: "Ex:097888654",
+              ),
             ),
             const SizedBox(
               height: 16,
@@ -78,11 +81,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                primary: Colors.black,
+                backgroundColor: Colors.black,
               ),
               onPressed: () {
-                BlocProvider.of<AuthBloc>(context)
-                    .add(LoginEvent(email: email, password: password));
+                BlocProvider.of<AuthBloc>(context).add(Login(email, password));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const RootScreen()));
               },
               child: const Text("connexion"),
             ),
